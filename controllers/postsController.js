@@ -33,14 +33,28 @@ export const createNewPost = async (req, res) => {
 }
 
 // Updating a post
-export const updatePost = async (req,res)=>{
-    const {id:_id} = req.params
+export const updatePost = async (req, res) => {
+    const { id: _id } = req.params
     const post = req.body
     // Now checking if that that id post is there or not
-    if(!mongoose.Types.ObjectId.isValid(_id))
+    if (!mongoose.Types.ObjectId.isValid(_id))
         return res.status(409).json({ success: false, message: "This post doesn't exist" })
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id,post,{new:true})
-    
+    const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true })
+
     res.status(201).json({ success: true, message: "Posts Updated Successfully", data: [updatePost] })
+}
+
+
+// Deleting a Post 
+export const deletePost = async (req, res) => {
+    const { id: _id } = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(_id))
+        return res.status(409).json({ success: false, message: "This post doesn't exist" })
+
+    await PostMessage.findByIdAndDelete(_id)
+
+
+    res.status(201).json({ success: true, message: "Posts Deleted Successfully", data: [] })
 }
