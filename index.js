@@ -3,6 +3,7 @@ import express from 'express'
 import connectToDB from'./config/DB.js'
 import cors from 'cors'
 import postRoute from './routes/postsRoute.js'
+import userRoute from './routes/userRoute.js'
 
 const  app = express()
 
@@ -17,8 +18,8 @@ const port = process.env.PORT || 5000
 app.use(express.json({ extended: false }))
 
 // Routes
-// app.use('/',require(''))
 app.use('/posts',postRoute)
+app.use('/user',userRoute)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)

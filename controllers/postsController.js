@@ -10,7 +10,7 @@ export const getPosts = async (req, res) => {
 
     } catch (error) {
 
-        res.status(409).json({ success: false, message: "Some internal error occured" })
+        res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
 
     }
 }
@@ -27,7 +27,7 @@ export const createNewPost = async (req, res) => {
 
     } catch (error) {
 
-        res.status(409).json({ success: false, message: "Some internal error occured" })
+        res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
 
     }
 }
@@ -46,7 +46,7 @@ export const updatePost = async (req, res) => {
         res.status(201).json({ success: true, message: "Posts Updated Successfully", data: [updatedPost] })
 
     } catch (error) {
-        res.status(409).json({ success: false, message: "Some internal error occured" })
+        res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
     }
 }
 
@@ -64,7 +64,7 @@ export const deletePost = async (req, res) => {
         res.status(201).json({ success: true, message: "Posts Deleted Successfully", data: [] })
     } catch (error) {
 
-        res.status(409).json({ success: false, message: "Some internal error occured" })
+        res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
 
     }
 }
@@ -83,6 +83,6 @@ export const likePost = async (req, res) => {
         res.status(201).json({ success: true, message: "Posts Liked Successfully", data: [updatedPost] })
 
     } catch (error) {
-        res.status(409).json({ success: false, message: "Some internal error occured" })
+        res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
     }
 }
