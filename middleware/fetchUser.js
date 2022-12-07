@@ -13,7 +13,6 @@ const fetchuser = async (req, res, next) => {
     try {
         const data = await jwt.verify(token, process.env.JWT_TOKEN)
         req.id = data.id
-        // console.log(req.id)
         next()
     } catch (error) {
         res.json({
