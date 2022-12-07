@@ -15,6 +15,29 @@ export const getPosts = async (req, res) => {
     }
 }
 
+// Retrieving posts by search 
+// Query /posts?page=1 --> page=1
+// Params /post/:id  --> id = 123
+export const getPostsBySearch = async (req, res) => {
+    const { searchQuery, tags } = req.query
+    try {
+        const title = new RegExp(searchQuery, 'i');
+        
+        // console.log(title)
+        const posts = await PostMessage.find({ $or: [{ title }, { tags: { $in: tags.split(',') } }] })
+        // console.log(posts)
+
+        res.status(201).json({ success: true, message: "Posts Retrieved Successfully by search", data: [posts] })
+
+
+    } catch (error) {
+        
+        res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
+
+    }
+}
+
+
 // Creating new post and saving it
 export const createNewPost = async (req, res) => {
     const body = req.body
