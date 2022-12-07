@@ -4,7 +4,9 @@ import connectToDB from'./config/DB.js'
 import cors from 'cors'
 import postRoute from './routes/postsRoute.js'
 import userRoute from './routes/userRoute.js'
+import dotenv from 'dotenv'
 
+dotenv.config()
 const  app = express()
 
 app.use(cors())
