@@ -34,27 +34,55 @@ export const createNewPost = async (req, res) => {
 
 // Updating a post
 export const updatePost = async (req, res) => {
-    const { id: _id } = req.params
-    const post = req.body
-    // Now checking if that that id post is there or not
-    if (!mongoose.Types.ObjectId.isValid(_id))
-        return res.status(409).json({ success: false, message: "This post doesn't exist" })
+    try {
+        const { id: _id } = req.params
+        const post = req.body
+        // Now checking if that that id post is there or not
+        if (!mongoose.Types.ObjectId.isValid(_id))
+            return res.status(409).json({ success: false, message: "This post doesn't exist" })
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true })
+        const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true })
 
-    res.status(201).json({ success: true, message: "Posts Updated Successfully", data: [updatePost] })
+        res.status(201).json({ success: true, message: "Posts Updated Successfully", data: [updatedPost] })
+
+    } catch (error) {
+        res.status(409).json({ success: false, message: "Some internal error occured" })
+    }
 }
 
 
 // Deleting a Post 
 export const deletePost = async (req, res) => {
-    const { id: _id } = req.params
+    try {
+        const { id: _id } = req.params
 
-    if (!mongoose.Types.ObjectId.isValid(_id))
-        return res.status(409).json({ success: false, message: "This post doesn't exist" })
+        if (!mongoose.Types.ObjectId.isValid(_id))
+            return res.status(409).json({ success: false, message: "This post doesn't exist" })
 
-    await PostMessage.findByIdAndDelete(_id)
+        await PostMessage.findByIdAndDelete(_id)
 
+        res.status(201).json({ success: true, message: "Posts Deleted Successfully", data: [] })
+    } catch (error) {
 
-    res.status(201).json({ success: true, message: "Posts Deleted Successfully", data: [] })
+        res.status(409).json({ success: false, message: "Some internal error occured" })
+
+    }
+}
+
+// When a post is liked
+export const likePost = async (req, res) => {
+    try {
+        const { id: _id } = req.params
+
+        if (!mongoose.Types.ObjectId.isValid(_id))
+            return res.status(409).json({ success: false, message: "This post doesn't exist" })
+
+        const post = await PostMessage.findById(_id)
+        const updatedPost = await PostMessage.findByIdAndUpdate(_id, { likeCount: post.likeCount + 1 }, { new: true })
+
+        res.status(201).json({ success: true, message: "Posts Liked Successfully", data: [updatedPost] })
+
+    } catch (error) {
+        res.status(409).json({ success: false, message: "Some internal error occured" })
+    }
 }
