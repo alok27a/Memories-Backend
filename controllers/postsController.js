@@ -15,14 +15,15 @@ export const getPosts = async (req, res) => {
     }
 }
 
-// Retrieving posts by search 
+// Retrieving posts by search  
 // Query /posts?page=1 --> page=1
 // Params /post/:id  --> id = 123
 export const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags } = req.query
+    //  /posts?searchQuery=null&tags=node
     try {
         const title = new RegExp(searchQuery, 'i');
-        
+
         // console.log(title)
         const posts = await PostMessage.find({ $or: [{ title }, { tags: { $in: tags.split(',') } }] })
         // console.log(posts)
@@ -31,7 +32,7 @@ export const getPostsBySearch = async (req, res) => {
 
 
     } catch (error) {
-        
+
         res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
 
     }
@@ -125,4 +126,25 @@ export const likePost = async (req, res) => {
     } catch (error) {
         res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
     }
+}
+
+// Commenting on a specific post
+export const commentPost = async (req, res) => {
+    const { id: _id } = req.params;
+
+    const { value } = req.body
+  
+    try {
+
+        const post = PostMessage.findById(_id)
+        post.comments.push(value)
+
+        const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true })
+
+        res.status(201).json({ success: true, message: "Comment Added Successfully", data: [updatedPost] })
+
+    } catch (error) {
+        res.status(409).json({ success: false, message: "Some internal error occured", data: [] })
+    }
+
 }
