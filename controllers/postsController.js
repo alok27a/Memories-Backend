@@ -1,5 +1,7 @@
+import mongoose from 'mongoose';
 import PostMessage from '../models/postsSchema.js'
 
+// Retrieving all posts
 export const getPosts = async (req, res) => {
     try {
         const postMessages = await PostMessage.find();
@@ -13,6 +15,7 @@ export const getPosts = async (req, res) => {
     }
 }
 
+// Creating new post and saving it
 export const createNewPost = async (req, res) => {
     const body = req.body
     // console.log(body)
@@ -27,4 +30,17 @@ export const createNewPost = async (req, res) => {
         res.status(409).json({ success: false, message: "Some internal error occured" })
 
     }
+}
+
+// Updating a post
+export const updatePost = async (req,res)=>{
+    const {id:_id} = req.params
+    const post = req.body
+    // Now checking if that that id post is there or not
+    if(!mongoose.Types.ObjectId.isValid(_id))
+        return res.status(409).json({ success: false, message: "This post doesn't exist" })
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(_id,post,{new:true})
+    
+    res.status(201).json({ success: true, message: "Posts Updated Successfully", data: [updatePost] })
 }
